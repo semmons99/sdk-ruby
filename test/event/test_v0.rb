@@ -240,4 +240,16 @@ describe CloudEvents::Event::V0 do
     assert_nil event[:traceparent]
     refute_includes event.to_h, "traceparent"
   end
+
+  it "completely thaws nested attributes when using #to_h" do
+    event = CloudEvents::Event::V0.new id:           my_id,
+                                       source:       my_source,
+                                       type:         my_type,
+                                       spec_version: spec_version,
+                                       data:         {a: {b: :c}}
+    h = event.to_h
+    refute h.frozen?
+    refute h.fetch("data").frozen?
+    refute h.fetch("data").fetch(:a).frozen?
+  end
 end

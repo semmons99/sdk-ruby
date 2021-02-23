@@ -126,7 +126,7 @@ module CloudEvents
       # @return [Hash]
       #
       def to_h
-        @attributes.dup
+        Marshal.load Marshal.dump(@attributes)
       end
 
       ##
